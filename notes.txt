@@ -1,0 +1,18 @@
+board
+
+has_many :ships
+
+ships
+belongs_to :board
+
+command line
+prompt user for input
+
+
+user/player
+attack a space
+
+
+board
+maintain orientation of ships
+initialized with random or user input
