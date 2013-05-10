@@ -17,16 +17,23 @@ class Board
         @spaces[column_num][row_num] = Space.new    
       end
     end
+     
+    #instantiate ships
+    #iterate over ships trying to place ships randomly
+      #validate if placement fits on board
+      #validate if doesn't overlap ship
+      #call place method on ship passing in coordinate array if validated
+    
     
   end
 
-    #return true if space exists
-  def exists(space)
     
+  def exists(space)
+    #return true if space exists
   end
 
   def has_up(space)
-        #return true if a space exists above a given space 
+    #return true if a space exists above a given space 
   end
   
   def has_right(space)

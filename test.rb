@@ -6,18 +6,8 @@ Dir.glob(project_root + '/battleship/*', &method(:require))
 a = Game.new(10)
 
 
-output = a.human.board.spaces[1][1].hey
-puts output
-
-a.prompt_for_command
-
-#puts letter_to_num('')
 
 
+#a.prompt_for_command
 
-#b = 'a'
-#puts "is number? "
-#puts numeric?(b)
-
-#puts "is letter? "
-#puts letter?(b)
+puts letter_to_num('b')
