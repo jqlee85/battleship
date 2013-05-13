@@ -5,9 +5,9 @@ Dir.glob(project_root + '/battleship/*', &method(:require))
 #instantiate game
 a = Game.new(10)
 
-
-output = a.human.board.spaces[1][1].hey
-puts output
+width = a.human.board.spaces.length
+height = a.human.board.spaces[1].length
+puts width.to_s + ' by ' + height.to_s + ' board.'
 
 a.prompt_for_command
 
@@ -15,9 +15,3 @@ a.prompt_for_command
 
 
 
-#b = 'a'
-#puts "is number? "
-#puts numeric?(b)
-
-#puts "is letter? "
-#puts letter?(b)

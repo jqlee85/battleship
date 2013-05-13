@@ -1,6 +1,6 @@
 class Ship
   
-  attr_reader :spots
+  attr_accessor :spots
   attr_reader :type
   attr_reader :type_fail
   attr_reader :coords
@@ -9,6 +9,7 @@ class Ship
     
     #set type
     @type = type
+   
     
     #create blank Hash to hold coordinates and hit status
     case type
@@ -25,10 +26,12 @@ class Ship
     else 
         @type_fail = true
         puts 'invalid ship type'
+        @spots = Hash.new
     end
   end #end initialize method
      
 #takes in coordinates and places ship
+  
   def place(coords)  
     #turns array of coordinates into hash with coords as keys and nil as hit values
     @spots = Hash[coords.collect { |coord| [coords, nil] }]

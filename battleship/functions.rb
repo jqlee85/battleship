@@ -10,8 +10,10 @@ def letter?(lookAhead)
 end
 
 #takes in string and returns true if numeric, false if not
-def numeric?(lookAhead)
-  if lookAhead =~ /^[-+]?[0-9]*\.?[0-9]+$/
+def numeric?(numberInput)
+  numberInput = numberInput.to_s
+  if numberInput =~ /^[-+]?[0-9]*\.?[0-9]+$/
+    
     return true
   else
     return false

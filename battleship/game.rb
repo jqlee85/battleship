@@ -7,7 +7,7 @@ class Game
     #instantiate players
     @human = Player.new(num_spaces)
     @comp = Player.new(num_spaces)
-    @num_spaces = num_spaces
+    @num_spaces = num_spaces.to_i
   end
   
   #display commands 
@@ -19,8 +19,8 @@ class Game
       
       puts  "s = show boards, q = quit, ? = help"
       
-      puts "Enter row number:"
-      
+      #get row input
+      puts "Enter column number:"
       x = gets.chomp
       if x =='s' 
         puts "show boardzzzzzz \n"
@@ -32,12 +32,45 @@ class Game
         puts 'help text here'
       else
         puts "you selected " + x
-        if !parse_coordinates(x) 
-          puts "Invalid coordinates, please try again. " + "\n" + "\n"
+        if !validate_coord_range(x) 
+          puts "Invalid column, please try again. " + "\n" + "\n"
         else
-          puts "That's a valid coordinate!"
+          #first coord is valid, get column input
+          puts "Enter row number:"
+          y = gets.chomp
+          if y =='s' 
+            puts "show boardzzzzzz \n"
+            show_boards
+          elsif y =='q'
+            puts 'quit the game'
+            exit
+          elsif y == '?'
+            puts 'help text here'
+          else
+            puts "you selected " + y
+            if !validate_coord_range(y) 
+              puts "Invalid row, please try again. " + "\n" + "\n"
+            else
+              puts "That coordinate is valid!!!!! carry on" + "\n\n\n\n"
+              #coordinates are valid
+              #check if space has been shot
+              #shoot if not
+              if !@comp.board.spaces[x.to_i - 1][y.to_i - 1].is_shot?
+                puts 'not shot yet'
+                @comp.board.spaces[x.to_i - 1][y.to_i - 1].shoot
+                puts 'you shot space ' + x + ',' + y + '!!!!!' + "\n"              
+              #else notify and prompt again
+              else
+                puts x + ',' + y +' has already been shot, enter a different coordinate.'
+              end
+              
+            
+            end
+          end
         end
       end
+      
+      #repeat command prompt
       prompt_for_command
   end
 
@@ -52,14 +85,17 @@ class Game
 
 
   #returns true if valid row or column # given, else returns false
-  def validate_coord_input(num)
-    if numeric?(num) && num <= @num_spaces && num > 0
+  def validate_coord_range(num)
+    number = num.to_i
+    if (numeric?(number) && number <= @num_spaces && number > 0)
       return true
     else
       return false
     end 
   end
 
+  #shoot coordinate
+  
 
 
 

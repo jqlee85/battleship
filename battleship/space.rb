@@ -24,7 +24,7 @@ class Space
   end
   
   #return true if shot, false if not
-  def is_shot 
+  def is_shot? 
     @shot
   end
   
