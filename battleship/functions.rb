@@ -38,3 +38,4 @@ def letter_to_num(letter)
   
   number = letter.ord - 96
 end
+

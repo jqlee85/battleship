@@ -4,6 +4,7 @@ class Ship
   attr_reader :type
   attr_reader :type_fail
   attr_reader :coords
+  attr_reader :ship_length
   
   def initialize(type)
     
@@ -15,14 +16,19 @@ class Ship
     case type
     when 'patrol boat'
         @spots = Hash.new(2)
+        @ship_length = 2
     when 'cruiser'
         @spots = Hash.new(3)
+        @ship_length = 3
     when 'submarine'
         @spots = Hash.new(3)
+        @ship_length = 3
     when 'battleship'
         @spots = Hash.new(4)
+        @ship_length = 4
     when 'aircraft carrier'
         @spots = Hash.new(5)
+        @ship_length = 5
     else 
         @type_fail = true
         puts 'invalid ship type'
