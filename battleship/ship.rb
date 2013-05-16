@@ -15,24 +15,24 @@ class Ship
     #create blank Hash to hold coordinates and hit status
     case type
     when 'patrol boat'
-        @spots = Hash.new(2)
+        @spots = Array.new(2)
         @ship_length = 2
     when 'cruiser'
-        @spots = Hash.new(3)
+        @spots = Array.new(3)
         @ship_length = 3
     when 'submarine'
-        @spots = Hash.new(3)
+        @spots = Array.new(3)
         @ship_length = 3
     when 'battleship'
-        @spots = Hash.new(4)
+        @spots = Array.new(4)
         @ship_length = 4
     when 'aircraft carrier'
-        @spots = Hash.new(5)
+        @spots = Array.new(5)
         @ship_length = 5
     else 
         @type_fail = true
         puts 'invalid ship type'
-        @spots = Hash.new
+        @spots = Array.new
     end
   end #end initialize method
      
@@ -43,7 +43,10 @@ class Ship
     @spots = Hash[coords.collect { |coord| [coords, nil] }]
   end
   
-  
+  #takes in array of coordinates and sets spots hash to reference corresponding spaces
+  def set_spots(coord_array)
+   
+  end
   
   
   
@@ -53,12 +56,13 @@ class Ship
   
 #returns true if sunk, false if alive
   def is_sunk?  
-    @hits.each do |spot|
-      if spot == nil
-        return false
-      end
+    sunk = true
+    @spots.each do |spot|
+      if !spot.is_shot?
+        sunk = false
+      end   
     end
-    return true
+    return sunk
   end
 
    
