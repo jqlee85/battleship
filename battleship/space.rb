@@ -1,6 +1,5 @@
 class Space
   
-  attr_reader :hey
   
   def initialize
     #map num to coordinates
@@ -8,7 +7,7 @@ class Space
     @shot = false
     @ship_id = nil
   
-    @hey = 'heyooooo'
+    
   end
   
   #return true if empty, false if occupied

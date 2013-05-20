@@ -46,7 +46,6 @@ class Game
       puts "Enter column number:"
       x = gets.chomp
       if x =='s' 
-        puts "show boardzzzzzz \n"
         show_boards
       elsif x =='q'
         puts 'quit the game'
@@ -71,7 +70,7 @@ class Game
     puts "Enter column number:"
     x = gets.chomp
     if x =='s' 
-      puts "show boardzzzzzz \n"
+      puts "\n"
       show_boards
     elsif x =='q'
       puts 'quit the game'
@@ -88,7 +87,7 @@ class Game
         puts "Enter row number:"
         y = gets.chomp
         if y =='s' 
-          puts "show boardzzzzzz \n"
+          puts "\n"
           show_boards
           prompt_for_command
         elsif y =='q'
