@@ -92,23 +92,23 @@ class Game
         end
       end
     end
-  
+      #check if game over
+      @game_over = true
       @comp.board.ships.each do |ship|
-        @game_over = true
         if !ship.is_sunk?
           @game_over = false
         end    
       end
-        
+      
+      #if game over exit  
       if @game_over
         puts 'The game is over!!! All ships sunk'
         @comp.board.display
         exit
-        
-      end
-      
-      #repeat command prompt
+      #else repeat command prompt  
+      else  
       prompt_for_command
+      end
   end
 
   #show human board and what they know of comp board
