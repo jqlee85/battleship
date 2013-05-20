@@ -9,25 +9,25 @@ class Board
     
     #set num of rows and columns
     @num_spaces = num_spaces
-    rows = *(0..num_spaces-1)
-    columns = *(0..num_spaces-1)
+    rows = *(1..@num_spaces)
+    columns = *(1..@num_spaces)
     
     #create array for spaces and instantiate space objects
-    @spaces = Array.new
+    @spaces = Hash.new
     columns.each do |column_num|
-      @spaces[column_num] = Array.new
+      @spaces[column_num] = Hash.new
       rows.each do |row_num|
         @spaces[column_num][row_num] = Space.new    
       end
     end
      
-    #instantiate ships hash
-    @ships = Hash.new
-    @ships['patrol boat'] = Ship.new('patrol boat')
-    @ships['cruiser'] = Ship.new('cruiser')
-    @ships['submarine'] = Ship.new('submarine')
-    @ships['battleship'] = Ship.new('battleship')
-    @ships['aircraft carrier'] = Ship.new('aircraft carrier')
+    #instantiate ships array
+    @ships = Array.new
+    @ships.push(Ship.new('patrol boat'))
+    @ships.push(Ship.new('cruiser'))
+    @ships.push(Ship.new('submarine'))
+    @ships.push(Ship.new('battleship'))
+    @ships.push(Ship.new('aircraft carrier'))
   
     #place ships on board
     place_ships
@@ -37,16 +37,16 @@ class Board
     
   def place_ships
     #iterate over ships hash trying to place ships randomly
-    @ships.each do |name, ship|
-    
-      puts "ship length is " + ship.ship_length.to_s
-      #create hash to hold coordinates  
-      coord_array = Array.new
+    @ships.each do |ship|
+      
       #set placed to false
       placed = false
      
       #while not placed, try to place 
       while !placed
+        #create Array to hold coordinates  
+        coord_array = Array.new
+        
         #generate random position
         origin = random_coords()
         test_coord = origin.dup
@@ -57,22 +57,12 @@ class Board
         #test each coord and add to hash if it is available
         ship.ship_length.times do
           if !is_available?(test_coord)
-            can_place = false
-            puts 'did not work'
-            @did_not_work += 1
-            if @did_not_work > 10000
-              puts 'too many failed places'
-              exit
-            end
-            break
-          
+            can_place = false          
+            break         
           else
             coord_array.push(test_coord.dup)
             test_coord = get_next(test_coord, orientation)
-          end
-          
-          
-          
+          end                
         end
         
         if can_place
@@ -87,10 +77,17 @@ class Board
       # TO DO 
       # TO DO 
       #mark spaces as occupied
-      #save coord_array
       
-      puts 'placed ship ' + ship.type 
-      puts 'array is ' + coord_array.length.to_s
+      #place ship
+      ship.place(coord_array)
+      puts 'placed ' + ship.type + ' at '
+      #mark spaces as occupied
+      ship.spots.each do |spot|
+        @spaces[spot['x']][spot['y']].occupy
+        puts spot['x'].to_s + spot['y'].to_s
+      end
+       
+      
       
     #loop restarts for next ship
     end
@@ -129,7 +126,6 @@ class Board
     if (coord['x'] < 1 || coord['x'] > @num_spaces || coord['y'] < 1 || coord['y'] > @num_spaces)
       return false
     end
-    puts 'x=' + coord['x'].to_s + '/y=' + coord['y'].to_s
     #checks if coord is available
     if @spaces[coord['x']][coord['y']].is_empty
       return true
@@ -198,7 +194,57 @@ class Board
 
   def display
     #displays board
-    puts 'this is a board'
+    
+    #first line
+    print '   '
+    @spaces.each do |column_num,row_num|
+      print ' ' + column_num.to_s + ' '
+    end
+    
+    #subsequent lines
+    
+    i=1
+    puts ''
+    @spaces[i].each do |row_key, space|
+      print row_key
+      if row_key.to_s.length == 1
+        print '  '
+      else
+        print ' '
+      end
+      
+      j=1
+      @num_spaces.times do  
+        if !@spaces[j][i].is_empty
+           print_space(j,i)
+        else
+          if@spaces[j][i].is_shot?
+            print ' O '
+          else
+            print '   '
+          end
+        end
+        j+=1
+      end  
+      
+      puts ''
+      i+=1
+    end
+    puts ''
+  
+  end
+  
+  def print_space(x,y)
+    coord = Hash.new
+    coord['x'] = x
+    coord['y'] = y
+    print '['
+    if @spaces[x][y].is_shot?
+      print 'X'
+    else
+      print ' '
+    end
+    print ']'
   end
   
 end

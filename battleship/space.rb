@@ -17,10 +17,9 @@ class Space
   end
   
   #mark space as occupied
-  def occupy(ship_id) 
+  def occupy
     @empty = false
-    #note which ship is occupying space
-    @ship_id = ship_id
+    
   end
   
   #return true if shot, false if not
