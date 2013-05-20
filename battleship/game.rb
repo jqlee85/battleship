@@ -155,6 +155,7 @@ class Game
       #else repeat command prompt  
       
       end
+    puts "\n"
     return shot_made
   end
 
@@ -204,7 +205,7 @@ class Game
       exit
     end
   
-  
+    puts "\n"
   end
 
 
