@@ -80,11 +80,11 @@ class Board
       
       #place ship
       ship.place(coord_array)
-      puts 'placed ' + ship.type + ' at '
+      #puts 'placed ' + ship.type + ' at '
       #mark spaces as occupied
       ship.spots.each do |spot|
         @spaces[spot['x']][spot['y']].occupy
-        puts spot['x'].to_s + spot['y'].to_s
+        #puts spot['x'].to_s + spot['y'].to_s
       end
        
       
@@ -92,14 +92,14 @@ class Board
     #loop restarts for next ship
     end
     
-    puts 'all ships placed'
+    #puts 'all ships placed'
     #all ships have been placed
   end
 
-  def random_coords()
+  def random_coords
     random_coords = Hash.new
-    random_coords['x'] = rand(0..@num_spaces-1)
-    random_coords['y'] = rand(0..@num_spaces-1)
+    random_coords['x'] = rand(1..@num_spaces)
+    random_coords['y'] = rand(1..@num_spaces)
     return random_coords
   end
 
