@@ -29,12 +29,13 @@ class Game
   
   def play_game
     while !@game_over
-      prompt_for_command
+      if prompt_for_command
       computer_turn
+      end
     end 
   end
   
-  #get input from user
+  #get input from user, return number of row or column
   def get_input(row_or_column)
     
     selected = false
@@ -62,6 +63,7 @@ class Game
     x
   end
 
+  #returns true if game over, false if not
   def game_over?
     if @human.is_defeated? || @comp.is_defeated?
       true
@@ -79,11 +81,7 @@ class Game
     x = get_input("column")
     #get row
     y = get_input("row")
-    
-    
         
-      
-            
     #shoot if not
     if !@comp.board.spaces[x.to_i][y.to_i].is_shot?
       @comp.board.spaces[x.to_i][y.to_i].shoot
