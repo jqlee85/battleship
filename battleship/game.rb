@@ -12,7 +12,7 @@ class Game
 
     display_commands
     
-    turn
+    play_game
   
   end
   
@@ -21,32 +21,30 @@ class Game
      puts "\n\n" + "WELCOME TO BATTLESHIP" + "\n"
      puts "Commands:"
      puts "s = Show boards"
+     puts "c = Cheat"
      puts "q = Quit game"
      puts "? = help"
      puts "\n"
   end
   
-  def turn
+  def play_game
     while !@game_over
-      if prompt_for_command
-        computer_turn
-      end
-        
-    end
-    
-    
-    
+      prompt_for_command
+      computer_turn
+    end 
   end
   
   #get input from user
-  def get_column_input
-    #get column input
-    column_selected = false
-    while !column_selected
-      puts "Enter column number:"
+  def get_input(row_or_column)
+    
+    selected = false
+    while !selected
+      puts "Enter #{row_or_column} number:"
       x = gets.chomp
       if x =='s' 
-        show_boards
+        show_boards(false)
+      elsif x =='c'
+        show_boards(true)
       elsif x =='q'
         puts 'quit the game'
         exit
@@ -55,105 +53,72 @@ class Game
       else
         puts "you selected " + x
         if !validate_coord_range(x) 
-          puts "Invalid column, please try again. " + "\n" + "\n"
+          puts "Invalid #{row_or_column}, please try again. " + "\n" + "\n"
+        else
+          selected = true
         end
       end
     end
+    x
   end
-  
-  
+
+  def game_over?
+    if @human.is_defeated? || @comp.is_defeated?
+      true
+    else
+      false
+    end   
+  end
+
+
   def prompt_for_command
       
     shot_made = false
-  
-    #get row input
-    puts "Enter column number:"
-    x = gets.chomp
-    if x =='s' 
-      puts "\n"
-      show_boards
-    elsif x =='q'
-      puts 'quit the game'
-      exit
-    elsif x == '?'
-      puts 'help text here'
-    else
-      
-      if !validate_coord_range(x) 
-        puts "Invalid column, please try again. " + "\n" + "\n"
+    
+    #get column
+    x = get_input("column")
+    #get row
+    y = get_input("row")
+    
+    
         
-      else
-        #first coord is valid, get column input
-        puts "Enter row number:"
-        y = gets.chomp
-        if y =='s' 
-          puts "\n"
-          show_boards
-          prompt_for_command
-        elsif y =='q'
-          puts 'quit the game'
-          exit
-        elsif y == '?'
-          puts 'help text here'
-          prompt_for_command
-        else
-          
-          if !validate_coord_range(y) 
-            puts "Invalid row, please try again. " + "\n" + "\n"
-            
-          else
-            
-            #shoot if not
-            if !@comp.board.spaces[x.to_i][y.to_i].is_shot?
-              @comp.board.spaces[x.to_i][y.to_i].shoot
-              puts 'you shot space ' + x + ',' + y + '!!!!!' + "\n"              
-              shot_made = true
-              
-              #check if hit
-              @comp.board.ships.each do |ship|
-                ship.spots.each do |spot|
-                  #if ship occupies space, mark shot  
-                  #spot is coord_array
-                  if spot['x'] == x.to_i && spot['y'] == y.to_i
-                    puts 'hit!'
-                    ship.hit_ship
-                    if ship.is_sunk?
-                      puts 'you sunk the ' + ship.type
-                    end
-                  end
-                   
-                end    
-              end  
-              
-              #if sunk ship, check if game over, set to over
-          
-            #else notify and prompt again
-            else
-              puts x + ',' + y +' has already been shot, enter a different coordinate.'
-            end
-            
-        
-          end
-        end
-      end
       
-    end
-      #check if game over
-      @game_over = true
+            
+    #shoot if not
+    if !@comp.board.spaces[x.to_i][y.to_i].is_shot?
+      @comp.board.spaces[x.to_i][y.to_i].shoot
+      puts 'you shot space ' + x + ',' + y + '!!!!!' + "\n"              
+      shot_made = true
+      
+      #check if hit
       @comp.board.ships.each do |ship|
-        if !ship.is_sunk?
-          @game_over = false
+        ship.spots.each do |spot|
+          #if ship occupies space, mark shot  
+          #spot is coord_array
+          if spot['x'] == x.to_i && spot['y'] == y.to_i
+            puts 'hit!'
+            ship.hit_ship
+            if ship.is_sunk?
+              puts 'you sunk the ' + ship.type
+            end
+          end
+           
         end    
-      end
+      end  
       
-      #if game over exit  
-      if @game_over
-        puts 'YOU WON!!!'
-        @comp.board.display
-        exit
-      #else repeat command prompt  
+  
+    #else notify and prompt again
+    else
+      puts x + ',' + y +' has already been shot, enter a different coordinate.'
+    end
       
-      end
+    #if game over exit  
+    if game_over?
+      puts 'YOU WON!!!'
+      @comp.board.display(true)
+      exit
+    end
+    
     puts "\n"
     return shot_made
   end
@@ -189,18 +154,10 @@ class Game
       end    
     end
     
-    #check if game over
-    @game_over = true
-    @comp.board.ships.each do |ship|
-      if !ship.is_sunk?
-        @game_over = false
-      end    
-    end
-    
     #if game over exit  
-    if @game_over
+    if game_over?
       puts "THE COMPUTER WON. On random... Up your game next time."
-      @human.board.display
+      @human.board.display(true)
       exit
     end
   
@@ -210,15 +167,15 @@ class Game
 
 
   #show human board and what they know of comp board
-  def show_boards
+  def show_boards(cheat)
     puts '      human board'
-    @human.board.display
+    @human.board.display(true)
     puts ''
     puts '      comp board'
-    @comp.board.display
+    @comp.board.display(cheat)
+    
   end
 
-  
   
 
 
@@ -231,10 +188,6 @@ class Game
       return false
     end 
   end
-
-  #shoot coordinate
-  
-
 
 
 end

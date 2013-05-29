@@ -192,13 +192,18 @@ class Board
     end  
   end
 
-  def display
+  def display(cheat)
     #displays board
     
     #first line
     print '   '
     @spaces.each do |column_num,row_num|
-      print ' ' + column_num.to_s + ' '
+      
+      if column_num.to_s.length < 2
+        print ' ' 
+      end
+      print column_num.to_s + ' '
+      
     end
     
     #subsequent lines
@@ -216,7 +221,7 @@ class Board
       j=1
       @num_spaces.times do  
         if !@spaces[j][i].is_empty
-           print_space(j,i)
+           print_space(j,i,cheat)
         else
           if@spaces[j][i].is_shot?
             print ' O '
@@ -234,17 +239,25 @@ class Board
   
   end
   
-  def print_space(x,y)
+  def print_space(x,y,cheat)
     coord = Hash.new
     coord['x'] = x
     coord['y'] = y
-    print '['
+    if cheat || @spaces[x][y].is_shot?
+      print '['
+    else
+      print ' '
+    end
     if @spaces[x][y].is_shot?
       print 'X'
     else
       print ' '
     end
-    print ']'
+    if cheat || @spaces[x][y].is_shot?
+      print ']'
+    else
+      print ' '
+    end
   end
   
 end
